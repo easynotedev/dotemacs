@@ -1,0 +1,92 @@
+cd ~
+shell
+version
+which
+$ZSH_name
+$ZSH_name
+$ZSH_NAME
+$version
+versino
+version
+rails c
+cd bitbucket/sample_app/
+rails generate integration_test users_index
+rails t
+create    test/integration/users_index_test.rb
+rails t
+rails t
+rails t
+rails t
+rails t
+rails generate add_admin_to_users admin:boolean
+rails generate migration add_admin_to_users admin:boolean
+rails db:migrate
+rails db:migrate:reset
+rails db:seed
+rails t
+NameError:         NameError: uninitialized constant UsersControllerTest::FILL_IN
+NameError:         NameError: uninitialized constant UsersControllerTest::FILL_IN
+rails t
+rails t
+/usr/lib/ruby/gems/2.4.0/gems/will_paginate-3.1.0/lib/will_paginate/view_helpers/link_renderer.rb:27: warning: constant ::Fixnum is deprecated
+rails t
+rails t
+rails t
+rails t
+rails t
+]2;[Minitest results] 35 tests
+rails t
+rail t
+rails t
+rails t
+rails t
+rails t
+rails t
+rails t
+rails
+rails t
+rails t
+rails t
+git add -A
+git commit -m "Finish user edit, update, index, and destroy actions"
+git checkout master
+git merge updating-users
+git push
+rails t
+git push heroku
+heroku pg:reset DATABASE
+heroku run rails db:migrate
+heroku run rails db:seed
+heroku restart
+pwd
+cd bitbucket/sample_app/
+git checkout -b account-activation
+rails generate controller AccountActivations
+rails t
+create      app/assets/javascripts/account_activations.coffee
+rails generate migration add_activation_to_users \activation_digest:string activated:boolean activated_at:datetime
+rails db:migrate
+rails t
+rails t
+rails t
+rails db:migrate:reset
+rails db:seed
+rails t
+rails generate mailer UserMailer account_activation password_reset
+rails c
+rails t
+rails t
+rails t
+rails t
+rails t
+rails t
+rails t
+rails t
+rails test:mailers
+rails t
+rails t
+rails t
+rails t
+rails t
+rails c
+ls
