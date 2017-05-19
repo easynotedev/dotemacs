@@ -24,9 +24,23 @@
     ("c9321e2db48a21fc656a907e97ee85d8cd86967855bf0bed3998bcf9195c758b" "f9574c9ede3f64d57b3aa9b9cef621d54e2e503f4d75d8613cbcc4ca1c962c21" "f206888744ed84e592521591efedd6954625d6c2aac5d45d81c2ea16d1cd4a33" default)))
  '(horizontal-scroll-bar-mode t)
  '(inhibit-startup-screen t)
+ '(menu-bar-mode nil)
  '(package-selected-packages (quote (web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
- '(pos-tip-foreground-color "#FFFFC8"))
+ '(pos-tip-foreground-color "#FFFFC8")
+ '(speedbar-default-position (quote right))
+ '(speedbar-frame-parameters
+   (quote
+    ((minibuffer)
+     (width . 8)
+     (border-width . 0)
+     (menu-bar-lines . 0)
+     (tool-bar-lines . 0)
+     (unsplittable . t)
+     (left-fringe . 0))))
+ '(speedbar-show-unknown-files t)
+ '(speedbar-verbosity-level 0)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -116,9 +130,9 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;; ////////////////
-;; Added Features//
-;; ////////////////
+;; /////////////////
+;; Added Functions//
+;; /////////////////
 
 ;; Makes *scratch* empty.
 (setq initial-scratch-message "")
@@ -155,3 +169,6 @@
 (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
 ;; toggle tool-bar
 (global-set-key [f8] 'toggle-tool-bar-mode-from-frame)
+
+;; enhances minibuffer completion
+(icy-mode 1)
