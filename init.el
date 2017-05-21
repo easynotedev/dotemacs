@@ -130,6 +130,10 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
+;;
+(require 'multi-term)
+
+
 ;; /////////////////
 ;; Added Functions//
 ;; /////////////////
@@ -169,6 +173,9 @@
 (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
 ;; toggle tool-bar
 (global-set-key [f8] 'toggle-tool-bar-mode-from-frame)
+
+;; reload init.el
+(global-set-key [f5] '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
 
 ;; enhances minibuffer completion
 (icy-mode 1)
