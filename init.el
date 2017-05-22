@@ -87,20 +87,6 @@
 (add-hook 'css-mode-hook 'global-column-enforce-mode)
 (add-hook 'html-mode-hook 'global-column-enforce-mode)
 
-;speed-bar
-(require 'sr-speedbar)
-(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
-
-(defun select-next-window ()
-  (other-window 1))
-
-(defun my-sr-speedbar-open-hook ()
-  (add-hook 'speedbar-before-visiting-file-hook 'select-next-window t)
-  (add-hook 'speedbar-before-visiting-tag-hook 'select-next-window t)
-  )
-
-(advice-add 'sr-speedbar-open :after #'my-sr-speedbar-open-hook)
-
 ;; highlight-parentheses)
 (require 'highlight-parentheses)
 (setq hl-paren-colors
@@ -164,18 +150,31 @@
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook 'delete-other-windows)
 
+;speed-bar
+(require 'sr-speedbar)
+(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
+
+(defun select-next-window ()
+  (other-window 1))
+
+(defun my-sr-speedbar-open-hook ()
+  (add-hook 'speedbar-before-visiting-file-hook 'select-next-window t)
+  (add-hook 'speedbar-before-visiting-tag-hook 'select-next-window t)
+  )
+
+(advice-add 'sr-speedbar-open :after #'my-sr-speedbar-open-hook)
 
 ;; removes menu-bar & tool-bar real state 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+;; reload init.el
+(global-set-key [f5] '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
+
 ;; toggle menu-bar
 (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
 ;; toggle tool-bar
 (global-set-key [f8] 'toggle-tool-bar-mode-from-frame)
-
-;; reload init.el
-(global-set-key [f5] '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
 
 ;; enhances minibuffer completion
 (icy-mode 1)
