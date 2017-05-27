@@ -23,9 +23,12 @@
    (quote
     ("c9321e2db48a21fc656a907e97ee85d8cd86967855bf0bed3998bcf9195c758b" "f9574c9ede3f64d57b3aa9b9cef621d54e2e503f4d75d8613cbcc4ca1c962c21" "f206888744ed84e592521591efedd6954625d6c2aac5d45d81c2ea16d1cd4a33" default)))
  '(horizontal-scroll-bar-mode t)
+ '(icicle-command-abbrev-alist (quote ((describe-variable k 2))))
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
- '(package-selected-packages (quote (web-mode sass-mode auto-complete)))
+ '(package-selected-packages
+   (quote
+    (xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(speedbar-default-position (quote right))
@@ -54,6 +57,8 @@
 ;; ///////////////
 ;; UI settings ///
 ;; ///////////////
+
+(require 'multi-term)
 
 ;; set bar cursor
 (setq-default cursor-type 'bar)
@@ -116,9 +121,43 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;;
-(require 'multi-term)
+;; ///////////
+;; Javascript/
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
+;; Better imenu
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+;; js2-refactor is a JavaScript refactoring library for emacs.Refactorings go
+;; from inlining/extracting variables to converting ternary operators to if statements. The
+;; https://github.com/magnars/js2-refactor.el
+;; provides the full list of keybindings.
+(require 'js2-refactor)
+(require 'xref-js2)
+
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+
+;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
+;; unbind it.
+(define-key js-mode-map (kbd "M-.") nil)
+
+(add-hook 'js2-mode-hook (lambda ()
+  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+
+(require 'company)
+(require 'company-tern)
+
+(add-to-list 'company-backends 'company-tern)
+(add-hook 'js2-mode-hook (lambda ()
+                           (tern-mode)
+                           (company-mode)))
+                           
+;; Disable completion keybindings, as we use xref-js2 instead
+(define-key tern-mode-keymap (kbd "M-.") nil)
+(define-key tern-mode-keymap (kbd "M-,") nil)
 
 ;; /////////////////
 ;; Added Functions//
@@ -178,3 +217,9 @@
 
 ;; enhances minibuffer completion
 (icy-mode 1)
+
+;;; Backup files
+;; Put them in one nice place if possible
+(if (file-directory-p "~/.backup")
+    (setq backup-directory-alist '(("." . "~/.backup")))
+  (message "Directory does not exist: ~/.backup"))
