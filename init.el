@@ -25,12 +25,13 @@
  '(horizontal-scroll-bar-mode t)
  '(icicle-command-abbrev-alist (quote ((describe-variable k 2))))
  '(inhibit-startup-screen t)
- '(menu-bar-mode nil)
+ '(menu-bar-mode t)
  '(package-selected-packages
    (quote
-    (xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
+    (projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
+ '(safe-local-variable-values nil)
  '(speedbar-default-position (quote right))
  '(speedbar-frame-parameters
    (quote
@@ -58,7 +59,8 @@
 ;; UI settings ///
 ;; ///////////////
 
-(require 'multi-term)
+;; Makes *scratch* empty.
+(setq initial-scratch-message "")
 
 ;; set bar cursor
 (setq-default cursor-type 'bar)
@@ -73,6 +75,43 @@
 (add-to-list 'default-frame-alist '(height . 200))
 (add-to-list 'default-frame-alist '(width . 103))
 
+;;; Backup files
+(setq
+   backup-by-copying t      ; don't clobber symlinks
+   backup-directory-alist
+    '(("." . "~/.emacsbackupfs"))    ; don't litter my fs tree
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t)       ; use versioned backups
+
+;; reload init.el
+(global-set-key [f5] '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
+
+;; toggle menu-bar
+(global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
+;; toggle tool-bar
+(global-set-key [f8] 'toggle-tool-bar-mode-from-frame)
+
+;; Removes *scratch* from buffer after the mode has been set.
+(defun remove-scratch-buffer ()
+  (if (get-buffer "*scratch*")
+      (kill-buffer "*scratch*")))
+(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+
+;; Removes *Completions* from buffer after you've opened a file.
+(add-hook 'minibuffer-exit-hook
+      '(lambda ()
+         (let ((buffer "*Completions*"))
+           (and (get-buffer buffer)
+                (kill-buffer buffer)))))
+
+;; Don't show *Buffer list* when opening multiple files at the same time.
+(setq inhibit-startup-buffer-menu t)
+
+;; Show only one active window when opening multiple files at the same time.
+(add-hook 'window-setup-hook 'delete-other-windows)
+
 ;; recent files
 (require 'recentf)
 (recentf-mode 1)
@@ -83,7 +122,6 @@
 (global-set-key (kbd "<C-down>") 'enlarge-window)
 (global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
 (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
-
 
 ;;80 column
 (require 'column-enforce-mode)
@@ -163,31 +201,11 @@
 ;; Added Functions//
 ;; /////////////////
 
-;; Makes *scratch* empty.
-(setq initial-scratch-message "")
+(desktop-save-mode 1)
 
-;; Removes *scratch* from buffer after the mode has been set.
-(defun remove-scratch-buffer ()
-  (if (get-buffer "*scratch*")
-      (kill-buffer "*scratch*")))
-(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
-
-;; Removes *messages* from the buffer.
-(setq-default message-log-max nil)
-(kill-buffer "*Messages*")
-
-;; Removes *Completions* from buffer after you've opened a file.
-(add-hook 'minibuffer-exit-hook
-      '(lambda ()
-         (let ((buffer "*Completions*"))
-           (and (get-buffer buffer)
-                (kill-buffer buffer)))))
-
-;; Don't show *Buffer list* when opening multiple files at the same time.
-(setq inhibit-startup-buffer-menu t)
-
-;; Show only one active window when opening multiple files at the same time.
-(add-hook 'window-setup-hook 'delete-other-windows)
+(require 'multi-term)
+(require 'projectile)
+(projectile-mode 1)
 
 ;speed-bar
 (require 'sr-speedbar)
@@ -203,23 +221,10 @@
 
 (advice-add 'sr-speedbar-open :after #'my-sr-speedbar-open-hook)
 
+;; enhances minibuffer completion
+(icy-mode 1)
+
 ;; removes menu-bar & tool-bar real state 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-;; reload init.el
-(global-set-key [f5] '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
-
-;; toggle menu-bar
-(global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
-;; toggle tool-bar
-(global-set-key [f8] 'toggle-tool-bar-mode-from-frame)
-
-;; enhances minibuffer completion
-(icy-mode 1)
-
-;;; Backup files
-;; Put them in one nice place if possible
-(if (file-directory-p "~/.backup")
-    (setq backup-directory-alist '(("." . "~/.backup")))
-  (message "Directory does not exist: ~/.backup"))
