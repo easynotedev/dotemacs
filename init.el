@@ -145,6 +145,10 @@
 (global-highlight-parentheses-mode t)
 (global-auto-complete-mode t)
 
+;; global Autocomplete
+(require 'company)
+(require 'company-tern)
+
 ;;sas-mode
 (require 'sass-mode)
 
@@ -185,8 +189,16 @@
 (add-hook 'js2-mode-hook (lambda ()
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
-(require 'company)
-(require 'company-tern)
+;; ///////////
+;; Ruby      /
+(add-hook 'ruby-mode-hook 'robe-mode)
+
+;;;Completion
+(eval-after-load 'company
+  '(push 'company-robe company-backends))
+
+;;; auto-complete
+(add-hook 'robe-mode-hook 'ac-robe-setup)
 
 (add-to-list 'company-backends 'company-tern)
 (add-hook 'js2-mode-hook (lambda ()
@@ -204,8 +216,6 @@
 (desktop-save-mode 1)
 
 (require 'multi-term)
-(require 'projectile)
-(projectile-mode 1)
 
 ;speed-bar
 (require 'sr-speedbar)
@@ -221,10 +231,92 @@
 
 (advice-add 'sr-speedbar-open :after #'my-sr-speedbar-open-hook)
 
-;; enhances minibuffer completion
-(icy-mode 1)
-
 ;; removes menu-bar & tool-bar real state 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+
+;;; Helm
+(require 'helm)
+(require 'helm-config)
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+(defun spacemacs//helm-hide-minibuffer-maybe ()
+  "Hide minibuffer in Helm session if we use the header line as input field."
+  (when (with-helm-buffer helm-echo-input-in-header-line)
+    (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+      (overlay-put ov 'window (selected-window))
+      (overlay-put ov 'face
+                   (let ((bg-color (face-background 'default nil)))
+                     `(:background ,bg-color :foreground ,bg-color)))
+      (setq-local cursor-type nil))))
+
+
+(add-hook 'helm-minibuffer-set-up-hook
+          'spacemacs//helm-hide-minibuffer-maybe)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+
+(helm-mode 1)
+
+;;; Command helm-M-x
+(global-set-key (kbd "M-x") 'helm-M-x)
+;;; Fuzzy match
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+;;; Autoresize
+(helm-autoresize-mode t)
+
+;;; use golden-ratio
+(defun pl/helm-alive-p ()
+(if (boundp 'helm-alive-p)
+    (symbol-value 'helm-alive-p)))
+
+;; (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
+
+;; Helm-mini
+(global-set-key (kbd "C-x b") 'helm-mini)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+
+
+(require 'paredit)
+
+;; Paredit
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+(add-hook 'js2-mode-hook           #'enable-paredit-mode)
 
