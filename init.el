@@ -4,8 +4,13 @@
 ;; You may delete these explanatory comments.
 
 (require 'package) ;; You might already have this line
+;;; Stable
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+;;; Bleeding-edged
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/"))
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
@@ -28,7 +33,7 @@
  '(menu-bar-mode t)
  '(package-selected-packages
    (quote
-    (projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
+    (helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(safe-local-variable-values nil)
@@ -259,6 +264,8 @@
       helm-ff-file-name-history-use-recentf t
       helm-echo-input-in-header-line t)
 
+(helm-mode 1)
+
 (defun spacemacs//helm-hide-minibuffer-maybe ()
   "Hide minibuffer in Helm session if we use the header line as input field."
   (when (with-helm-buffer helm-echo-input-in-header-line)
@@ -277,39 +284,45 @@
 (setq helm-autoresize-min-height 20)
 (helm-autoresize-mode 1)
 
-(helm-mode 1)
-
 ;;; Command helm-M-x
 (global-set-key (kbd "M-x") 'helm-M-x)
-;;; Fuzzy match
-(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+;;; Fuzzy match
+;; (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
+;;; helm projectile caching
+(setq projectile-enable-caching t)
 
 ;;; Autoresize
 (helm-autoresize-mode t)
+
+;;; Golden ratio.el
+;;; https://github.com/roman/golden-ratio.el
+(require 'golden-ratio)
+(golden-ratio-mode 1)
 
 ;;; use golden-ratio
 (defun pl/helm-alive-p ()
 (if (boundp 'helm-alive-p)
     (symbol-value 'helm-alive-p)))
 
-;; (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
+(add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
 
 ;; Helm-mini
 (global-set-key (kbd "C-x b") 'helm-mini)
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
 
+;; helm projectile
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 
+(setq helm-projectile-fuzzy-match nil)
+(require 'helm-projectile)
+(helm-projectile-on)
 
 (require 'paredit)
-
 ;; Paredit
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
