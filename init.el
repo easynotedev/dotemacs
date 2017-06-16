@@ -1,9 +1,7 @@
 ;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+;; installed packages.  Don't delete this line.
+(require 'package)
 
-(require 'package) ;; You might already have this line
 ;;; Stable
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -11,6 +9,7 @@
 ;;; Bleeding-edged
 ;; (add-to-list 'package-archives
 ;;              '("melpa" . "https://melpa.org/packages/"))
+
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
