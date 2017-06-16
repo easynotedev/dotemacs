@@ -122,11 +122,13 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 
+;;; change  windows
+(global-set-key (kbd "C-.") 'other-window)
+(global-set-key (kbd "C-,") 'prev-window)
 
-(global-set-key (kbd "<C-up>") 'shrink-window)
-(global-set-key (kbd "<C-down>") 'enlarge-window)
-(global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
-(global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
+(defun prev-window ()
+  (interactive)
+  (other-window -1))
 
 ;;80 column
 (require 'column-enforce-mode)
@@ -185,7 +187,7 @@
 
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 (js2r-add-keybindings-with-prefix "C-c C-r")
-(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+;; (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
 
 ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
 ;; unbind it.
@@ -312,6 +314,8 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
+;;; Unbind C-x C-b  = bufferlist
+(global-set-key (kbd "C-x C-b")'nil)
 
 ;; helm projectile
 (projectile-global-mode)
