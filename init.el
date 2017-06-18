@@ -3,12 +3,12 @@
 (require 'package)
 
 ;;; Stable
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ;;; Bleeding-edged
-;; (add-to-list 'package-archives
-;;              '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -32,7 +32,7 @@
  '(menu-bar-mode t)
  '(package-selected-packages
    (quote
-    (helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
+    (pug-mode helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(safe-local-variable-values nil)
@@ -194,6 +194,10 @@
 
 (add-hook 'js2-mode-hook (lambda ()
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+
+;; ///////////////
+;; pug-mode (ex-Jade) /
+(require 'pug-mode)
 
 ;; ///////////
 ;; Ruby      /
