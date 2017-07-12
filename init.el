@@ -174,8 +174,11 @@
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
-(setq emmet-expand-jsx-className? t) ;; default nil
+;; If you want to use emmet with react-js's JSX,
+;; you probably want emmet to expand 'className="..."' instead of 'class="..."':
+(setq emmet-expand-jsx-className? nil) ;; default nil
 
 ;; ///////////
 ;; Handlebars/
@@ -331,5 +334,10 @@
 (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
 (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-(add-hook 'js2-mode-hook           #'enable-paredit-mode)
-(add-hook 'pug-mode            #'enable-paredit-mode)
+
+;; Skeleton Mode
+;; Match Delimeters
+(setq skeleton-pair t)
+(global-set-key "(" 'skeleton-pair-insert-maybe)
+(global-set-key "[" 'skeleton-pair-insert-maybe)
+(global-set-key "{" 'skeleton-pair-insert-maybe)
