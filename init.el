@@ -32,7 +32,7 @@
  '(menu-bar-mode t)
  '(package-selected-packages
    (quote
-    (pug-mode helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
+    (emmet-mode handlebars-sgml-mode pug-mode helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(safe-local-variable-values nil)
@@ -170,6 +170,18 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 ;; ///////////
+;; Emmet-mode/
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(setq emmet-move-cursor-between-quotes t) ;; default nil
+(setq emmet-expand-jsx-className? t) ;; default nil
+
+;; ///////////
+;; Handlebars/
+(require 'handlebars-sgml-mode)
+
+;; ///////////
 ;; Javascript/
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -195,7 +207,7 @@
 (add-hook 'js2-mode-hook (lambda ()
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
-;; ///////////////
+;; ////////////////////
 ;; pug-mode (ex-Jade) /
 (require 'pug-mode)
 
@@ -320,4 +332,4 @@
 (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 (add-hook 'js2-mode-hook           #'enable-paredit-mode)
-
+(add-hook 'pug-mode            #'enable-paredit-mode)
