@@ -72,7 +72,7 @@
 ;; remove emacs welcome screen
 (setq inhibit-startup-message t)
 
-;; line nunmbers
+;; line numbers
 (global-linum-mode t)
 
 ;;frame-size
@@ -156,10 +156,19 @@
 (require 'company)
 (require 'company-tern)
 
-;;sas-mode
+;; Multiple cursor-mode
+;; So that's why multiple-cursors occasionally asks what to do about a command.
+;; It will then remember your choice by saving it 
+(setq mc/list-file "~/.emacs.d/lisp/")
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
+
+;; //////////
+;; sas-mode /
 (require 'sass-mode)
 
-;; web-mode
+;; //////////
+;; web-mode /
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -245,8 +254,8 @@
 ;; pug-mode (ex-Jade) /
 (require 'pug-mode)
 
-;; ///////////
-;; Ruby      /
+;; /////////////
+;; =>Ruby-hook /
 (add-hook 'ruby-mode-hook 'robe-mode)
 
 ;;;Completion
@@ -315,10 +324,6 @@
       helm-ff-file-name-history-use-recentf t
       helm-echo-input-in-header-line t)
 
-(helm-mode 1)
-
-;;; DELETED helm integration codes with spacemacs
-
 ;;; Command helm-M-x
 (global-set-key (kbd "M-x") 'helm-M-x)
 
@@ -356,8 +361,8 @@
 (require 'helm-projectile)
 (helm-projectile-on)
 
+;;Paredit
 (require 'paredit)
-;; Paredit
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
 (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
