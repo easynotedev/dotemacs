@@ -32,7 +32,7 @@
  '(menu-bar-mode t)
  '(package-selected-packages
    (quote
-    (coffee-mode tide paganini-theme emmet-mode handlebars-sgml-mode pug-mode helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
+    (handlebars-mode coffee-mode tide paganini-theme emmet-mode pug-mode helm-ag projectile xref-js2 company-tern flycheck js2-refactor js2-mode web-mode sass-mode auto-complete)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(safe-local-variable-values nil)
@@ -210,20 +210,21 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 ;; ///////////
+;; Handlebars/
+
+
+;; ///////////
 ;; Emmet-mode/
 (require 'emmet-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'handlebars-mode-hook 'emmet-mode)
 ;; (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
 ;; If you want to use emmet with react-js's JSX,
 ;; you probably want emmet to expand 'className="..."' instead of 'class="..."':
 (setq emmet-expand-jsx-className? nil) ;; default nil
-
-;; ///////////
-;; Handlebars/
-(require 'handlebars-sgml-mode)
 
 ;; ///////////
 ;; Javascript/
